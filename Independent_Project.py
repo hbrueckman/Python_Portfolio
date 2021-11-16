@@ -1,3 +1,4 @@
+
 # This script was writtent to complete a lab from my Intro to GIS class that I orginally did all in ArcMap.
 # I took on the challenge of completing the objective of the lab only through python script. 
 # The Obejecive of the lab was to complete spatial analysis through query. 
@@ -55,8 +56,9 @@ for a in assert_list:
     for l in assert_list:
         assert a.crs == l.crs , "CRS differs between layers"
 
+# The coodrinate systems matched among the layers.        
 
-# Determined area and made a new attribute column that displays area in acres. Since the projection is uses meters I converted it to acres by dividing it by 4,047
+# Determined area and made a new attribute column that displays area in acres. Since the projection uses meters I converted it to acres by dividing it by 4,047
 
 forest['Area']=forest.area/4047
 forinv=forinv.drop(columns=['geometry'])
@@ -167,8 +169,6 @@ adj_y=gpd.read_file(adjfp)
 
 
 # Question 5: Figure out how many stands are within 250 meters of old stands between the ages of 150 to greater than 200 years old. Remove these stands from the selection.
-# This spatial query removed stands of trees from the Cut_Block layer that were aged 150 to greater than 200 years old and were within 250 meters of the current selected stands(adj_y). There are now 230 trees in the selction and their total area in acres is 4,335
-
 
 # First I created a layer that has only the stands in groups 13 and 14, which is the code for the trees from age 150 and older
 
@@ -179,7 +179,6 @@ other_trees=cutblock[cutblock['STAND_AGE'].isin(['13','14'])]
 # I put 250 in the code without indicating units because .buffer() uses the crs dimensions, which in this case is in meters.
 
 other_trees['250_buffer']=other_trees['geometry'].buffer(250)
-
 other_trees['250_buffer'].plot()
 
 
@@ -198,7 +197,7 @@ buffer1=adj_y[adj_y['250_buffer']==False]
 print (buffer1['Area'].sum())
 
 
-# Answer 5: There are now 230 trees in the selction and their total area in acres is 4,335
+# Answer 5: There are now 230 trees now in the selction and their total area in acres is 4,335
 
 
 
@@ -217,7 +216,7 @@ sample_point['geometry'] = [Point(xy) for xy in zip(sample_point.UTM_X, sample_p
 sample_point.plot()
 
 # next I figured out which of the selection (buffer1) polygons intersected with the monitoring plots. 
-# Again I used unary_union to avoid issues with the indexes. 
+# Again I used unary_union to avoid issues with the indexes and then used .intersects() 
 # I also found that I could do sample_point.within(buffer1.unary_union) and get the same results, but then I wasnt able to determine which of the polygons in buffer1 contained the monitoring plots, because unary_union joined the polygons to be one geometry. 
 # I also tried .contain() but this came back with 0. Im not sure what .contains does in geopandas. I assumed it was the opposite of .within(), but that didnt seem to be true. 
 
@@ -235,9 +234,9 @@ perm_plot=buffer1[buffer1['sample_point']==False]
 
 
 
-# Question 7: select plots that have a slope from 0-15%. How many stands are now in the selectoin?
+# Question 7: select only the plots that have a slope from 0-15%. How many stands are now in the selectoin?
 
-# First i grouped the current selection (perm_plot) by SLPCLASS, and then wrote code to determine the differnt attributes for this field and realized I needed to select plots with an SLPCLASS of 0-4% and 5-15%. 
+# First I grouped the current selection (perm_plot) by SLPCLASS, and then wrote code to determine the differnt attributes for this field and realized I needed to select plots with an SLPCLASS of 0-4% and 5-15%. 
 
 group_slp=perm_plot.groupby('SLPCLASS')
 
@@ -263,7 +262,7 @@ road_buffer_100m=road['geometry'].buffer(100)
 road['buffer_100m']=road_buffer_100m
 
 
-# next i found which polygons of the current selection intersect with this 100 meter road buffer.  
+# Next i found which polygons of the current selection intersect with this 100 meter road buffer.  
 
 road_intersect=slope_select.intersects(road['buffer_100m'].unary_union)
 
@@ -314,9 +313,3 @@ print(len(final_Cutblocks.index))
 
 final_cutblocksfp="/users/haleybrueckman/desktop/computer_practice/python/Lab9_Raw_Data/final_cutblocks.shp"
 final_Cutblocks.to_file(final_cutblocksfp)
-
-
-
-
-
-
