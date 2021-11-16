@@ -1,13 +1,26 @@
-#!/usr/bin/env python
-# coding: utf-8
+# This script was writtent to complete a lab from my Intro to GIS class that I orginally did all in ArcMap. I took on the challenge of completing the objective of the lab only through python script. 
+# Obejecive of the lab was to complete spatial analysis through query. The lab focused on analyzing inventory data from a Forest and determining which set of forest stands meet the criteria for harvest based on certain parameters. 
 
-# In[594]:
+# The parameters for a harvest stand to be met include: 
+
+# 1. Owned by the University of Montana 
+# 2. Must be between the ages of 70-125 years old. 
+# 3. Cannot be adjacent to young stands that are between the age 1-20 years old. 
+# 4. Cannot be within 250 meters of old stands that are between 150 and >200 years old. 
+# 5. Cannot have monitoring plots within them 
+# 6. Must have to be on land with a slope ranging from 0-15% 
+# 7. Must be within 100 m of a road 
+# 8. Cannot be within 20 m of a stream
+
+# All of these parameters had to be true to determine if a forest stand was harvestable. To figure this out I systematically went through the data checking for each parameter and removing non harvest stands until I had stands that met the criteria. 
+
+# The data I used for this included shapefiles for forest boundary, forest stands, perenial streams, and roads. I also had a forest inventory table that had information for each each stand, and I joined this table with the forest stands polygon layer. The last bit of data was XY data of points that showed where monitoring plots were. 
 
 
 import geopandas as gpd
 
 
-# In[595]:
+
 
 
 import matplotlib.pyplot as plt
