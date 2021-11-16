@@ -7,9 +7,9 @@ My portfolio demonstrates my ability to:
 
 •	Utilize python libraries such as geopandas, shapely, numpy, and matplotlib
   
-• Geocode
+• Perform a spatial query
 
-•	Plot data 
+•	geocode 
 
 
 Although I am still learning python, I excited about the vast potential that it can offer to my GIS work. Learning python has helped me to better understand the backend processes that underlie GIS and to be more efficicent. I'm excited to continue developing this skill!
